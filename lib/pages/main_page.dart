@@ -14,16 +14,22 @@ class MainPage extends StatelessWidget {
     return Consumer<Data>(
       builder: (context, data, _) {
         return Scaffold(
+          appBar: AppBar(
+            title: Center(child: Text ('Hive Lesson', style: TextStyle(fontSize: 30, color: Colors.black.withOpacity(0.7)),)),
+            backgroundColor: Colors.lightBlueAccent.withOpacity(0.5),
+          ),
           body: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                    onPressed: () =>
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                const AddPage())),
+                    onPressed: () {
+                      data.isEdit = false;
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                              const AddPage()));
+                    },
                     child: const Text('Add')
                 ),
                 Container(
@@ -39,9 +45,17 @@ class MainPage extends StatelessWidget {
                         itemBuilder: (context, index){
                           return GestureDetector(
                             onLongPress: () => data.deleteTask(box, index),
+                            onDoubleTap: () {
+                              data.isEdit = true;
+                              data.editTask(index, value[index].text, value[index].number, value[index].color, box);
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (context) =>
+                                  const AddPage()));
+                            },
                             child: Container(
                               width: 150,
                               height: 50,
+                              margin: const EdgeInsets.symmetric(vertical: 5),
                               color: value[index].color ? Colors.blue : Colors.red,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
